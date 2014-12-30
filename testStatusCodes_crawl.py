@@ -3,11 +3,9 @@ import urllib
 import re
 import csv 
 
-def crawl_around(urlGiven, n):
-	if n<500:
-		#if n>10:
-		# return
-		#print "Begins testing %d:" %n + urlGiven
+def crawl_around(urlGiven):
+	#This value is the maximun number of URLs the set can hold, if not set and the site tested is big enough the recursion will reach a limit and the program breaks
+	if len(urls_set)<500:
 		if urlGiven.endswith("/"):
 			urlGiven = urlGiven[:-1]
 		urlGiven_html = urllib.urlopen(urlGiven)
@@ -32,7 +30,7 @@ def crawl_around(urlGiven, n):
 
 		#if the page I'm on right now is not in the ones I've alread checked, I recursively call the procedure again
 		if urlGiven not in urls_set:
-			crawl_around(urlGiven, n+1)
+			crawl_around(urlGiven)
 	return
 
 def writeToFile(txtBoolean, csvBoolean):
@@ -42,6 +40,7 @@ def writeToFile(txtBoolean, csvBoolean):
 		statusCodesTXT = open("status_codes.txt", "w")
 		for url in urls_set:
 			statusCodesTXT.write(url + " : %d\n" % urllib.urlopen(url).code)
+		statusCodesTXT.close()	
 		print "Done with the TXT file!"	
 	#write csv file
 	if csvBoolean:		
@@ -59,7 +58,7 @@ print "Crawling..."
 
 urls_set = set()
 
-crawl_around(urlGivenByUser, 0)
+crawl_around(urlGivenByUser)
 
 selected_option = raw_input("Do you want the results to be writte as a:\n  1)Text file (status_codes.txt).\n  2)CSV file (status_codes.csv).\n  3)Both.\nSelection: ")
 if selected_option == "1":
