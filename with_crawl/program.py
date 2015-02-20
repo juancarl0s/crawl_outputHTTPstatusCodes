@@ -35,21 +35,39 @@ def crawl_around(urlGiven):
 
 def writeToFile(txtBoolean, csvBoolean):
 	#write text file
+	print "Writing to file(s)"
 	if txtBoolean:
-		print "Writing to TXT file..."
-		statusCodesTXT = open("status_codes.txt", "w")
-		for url in urls_set:
-			statusCodesTXT.write(url + " : %d\n" % urllib.urlopen(url).code)
-		statusCodesTXT.close()	
-		print "Done with the TXT file!"	
-	#write csv file
-	if csvBoolean:		
-		print "Writing to CSV file..."
-		statusCodesCSV = csv.writer(open("status_codes.csv", "wb"))
-		for url in urls_set:
+		statusCodesTXT = open("urls_and_statusCodes.txt", "w")
+	if csvBoolean:	
+		statusCodesCSV = csv.writer(open("urls_and_statusCodes.csv", "wb"))
+
+	for url in urls_set:
+		print "Checking %s" % url
+		if txtBoolean:
+			statusCodesTXT.write(url + "Status code: %d" % urllib.urlopen(url).code + "\n\n")
+		if csvBoolean:
 			statusCodesCSV.writerow([url, urllib.urlopen(url).code])
-		print "Done with the CSV file!"	
+
+	if txtBoolean:		
+		statusCodesTXT.close()	
+	print "Done with file(s)"	
+
 	return
+	# if txtBoolean:
+	# 	print "Writing to TXT file..."
+	# 	statusCodesTXT = open("status_codes.txt", "w")
+	# 	for url in urls_set:
+	# 		statusCodesTXT.write(url + " : %d\n" % urllib.urlopen(url).code)
+	# 	statusCodesTXT.close()	
+	# 	print "Done with the TXT file!"	
+	# #write csv file
+	# if csvBoolean:		
+	# 	print "Writing to CSV file..."
+	# 	statusCodesCSV = csv.writer(open("status_codes.csv", "wb"))
+	# 	for url in urls_set:
+	# 		statusCodesCSV.writerow([url, urllib.urlopen(url).code])
+	# 	print "Done with the CSV file!"	
+	# return
 
 domainGivenByUser = raw_input('Enter the domain (i.e.: mysite.dev): ')
 
